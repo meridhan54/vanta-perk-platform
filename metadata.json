@@ -1,0 +1,8 @@
+{
+  "name": "VANTA - Personel Yan Hak Platformu",
+  "description": "Türkiye'deki çalışanlar için geliştirilmiş, B2B2C modelinde çalışan modern bir yan hak ve kampanya pazaryeri platformu.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
