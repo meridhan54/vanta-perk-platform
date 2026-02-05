@@ -6,16 +6,28 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    // Sourcemap hatasını engellemek için kapatıyoruz
+    // Kaynak haritalarını tamamen kapatıyoruz, böylece eksik dosya hatası alınmaz
     sourcemap: false,
+    // Terser yerine esbuild kullanarak daha hızlı ve hatasız derleme sağlıyoruz
+    minify: 'esbuild',
     rollupOptions: {
-      // "use client" yönergesi uyarılarını susturur
+      // Build'i durduran tüm uyarıları susturuyoruz
       onwarn(warning, warn) {
-        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+        // React Router 7 "use client" ve sourcemap hatalarını filtrele
+        if (
+          warning.code === 'MODULE_LEVEL_DIRECTIVE' || 
+          warning.code === 'SOURCEMAP_ERROR' ||
+          warning.message.includes('use client') ||
+          warning.message.includes('sourcemap')
+        ) {
           return;
         }
         warn(warning);
       },
     },
+  },
+  // Modern modül çözünürlüğü ayarları
+  resolve: {
+    mainFields: ['module', 'main'],
   }
 });
