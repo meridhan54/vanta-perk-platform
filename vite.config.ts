@@ -6,14 +6,14 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    // Kaynak haritalarını tamamen kapatıyoruz, böylece eksik dosya hatası alınmaz
+    // Kaynak haritalarını tamamen kapatıyoruz. Cloudflare build sırasında eksik .map dosyası hatasını engeller.
     sourcemap: false,
-    // Terser yerine esbuild kullanarak daha hızlı ve hatasız derleme sağlıyoruz
+    // Modern minification ayarı
     minify: 'esbuild',
     rollupOptions: {
-      // Build'i durduran tüm uyarıları susturuyoruz
+      // Build'i durduran veya kirleten uyarıları filtreliyoruz
       onwarn(warning, warn) {
-        // React Router 7 "use client" ve sourcemap hatalarını filtrele
+        // React Router 7 "use client" yönergesi ve eksik sourcemap hataları build'i bozmasın
         if (
           warning.code === 'MODULE_LEVEL_DIRECTIVE' || 
           warning.code === 'SOURCEMAP_ERROR' ||
@@ -26,7 +26,7 @@ export default defineConfig({
       },
     },
   },
-  // Modern modül çözünürlüğü ayarları
+  // Paket çözünürlüğü için modern modül öncelikleri
   resolve: {
     mainFields: ['module', 'main'],
   }
