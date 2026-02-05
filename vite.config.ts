@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -7,6 +6,16 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    // Sourcemap hatasını engellemek için kapatıyoruz
+    sourcemap: false,
+    rollupOptions: {
+      // "use client" yönergesi uyarılarını susturur
+      onwarn(warning, warn) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+          return;
+        }
+        warn(warning);
+      },
+    },
   }
 });
